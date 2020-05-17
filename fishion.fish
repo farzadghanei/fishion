@@ -25,11 +25,11 @@ function fishion --description "select a fish session"
         echo "if no session name is passed, it will be 'default'."
         echo "names can have alphanumeric characters only"
         echo "session configuring and initialization:"
-        echo '    fishion_user_init_$session: function to init the session'
-        echo '    fishion_user_vars: list of exported variable names on start.'
-        echo '      values are picked from $var_name_$session. example:'
-        echo '      set -U fishion_user_vars PATH'
-        echo '      set -U PATH_work "$PATH /usr/local/work/bin"'
+        echo '  fishion_user_init_$session: function to init the session'
+        echo '  fishion_user_vars: list of universal variable names to set'
+        echo '    values are picked from $varname_$session. example:'
+        echo '    set -U fishion_user_vars PATH'
+        echo '    set -U PATH_work "$PATH $HOME/work/bin"'
         return 0
     end
     if contains -- '-v' $argv; or contains -- '--version' $argv
@@ -72,10 +72,14 @@ function fishion --description "select a fish session"
     end
 
     # populate selected user variables with values set for session
-    set -l _var_name ''
-    for _var_name in $fishion_user_vars
-        if test -z "$_var_name"_"$session"
-            set -U $_var_name "$_var_name"_"$sesion"
+    # $fishion_user_vars stores list of variable names, that each session can
+    # overwrite the value.
+    set -l _varname ''
+    for _varname in $fishion_user_vars
+        set -l _varname_for_session "$_varname"_"$session"
+        if set --query $_varname_for_session  # session has an overwrite for _varname
+            set -l _val_in_session $$_varname_for_session  # dereference to get the overwriting value
+            set -U $_varname "$_val_in_session"
         end
     end
 end
