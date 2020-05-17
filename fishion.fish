@@ -28,8 +28,8 @@ function fishion --description "select a fish session"
         echo '  fishion_user_init_$session: function to init the session'
         echo '  fishion_user_vars: list of universal variable names to set'
         echo '    values are picked from $varname_$session. example:'
-        echo '    set -U fishion_user_vars PATH'
-        echo '    set -U PATH_work "$PATH $HOME/work/bin"'
+        echo '    set -U fishion_user_vars myvar'
+        echo '    set -U myvar_work "value of myvar in work session"'
         return 0
     end
     if contains -- '-v' $argv; or contains -- '--version' $argv

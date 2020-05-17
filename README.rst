@@ -6,9 +6,8 @@ Fishion
 the concept of sessions. Sessions isolate command history and allow minor
 customizations. This helps to stay focused on the context of the session.
 
-
 Usage
------
+=====
 
 .. code-block:: fish
 
@@ -22,7 +21,7 @@ Usage
 
 
 Installation
-------------
+============
 
 `fishion` is a fish function, so installation means to add it to fish function library.
 
@@ -39,13 +38,18 @@ path where `fish` would look for functions (maybe controlled by `$XDG_DATA_DIRS`
 
    ~> echo $XDG_DATA_DIRS
    /usr/local/share:/usr/share
-   ~> cp fishion.fish /usr/share/fish/vendor_functions.d/
+   ~> mkdir -p /usr/local/share/fish/vendor_functions.d
+   ~> cp fishion.fish /usr/local/share/fish/vendor_functions.d/
 
 
 Sessions
---------
+========
+
 Each session uses its own history (by setting `fish_history <https://fishshell.com/docs/current/index.html#special-variables>`_),
 and can be used to customize some shell settings (prompt colors, etc.)
+
+Sessions use universal variables, so activating a session affects all
+existing open shells and new ones, until the session is changed again.
 
 Using sessions not only helps to customize the shell settings/UI per context,
 but also is an easy way to do such customizations for other commands run by the
@@ -53,8 +57,15 @@ shell (for example via environment variables).
 
 Session names can be any arbitrary value, but should only contain alphanumeric characters.
 
-Sessions can be customized by defining initialization
-`functions <https://fishshell.com/docs/current/index.html#functions>`_ named after the session.
+Sessions can be customized by:
+
+#. defining initialization `functions <https://fishshell.com/docs/current/index.html#functions>`_ named after the session.
+#. listing universal variable names, and provding values for such variables per session
+
+
+Init Functions
+--------------
+
 Each init function name is prefixed with `fishion_user_init_` and ends with the session name.
 
 
@@ -71,6 +82,40 @@ For example:
         # command to run when default session is selected, maybe undo/reset what other sessions did?
     end
 
+Session Values For Universal Variables
+--------------------------------------
+
+Each session can set values for some variables, to define new variables or overwrite existing ones.
+`fishion` needs to know which variables to set, so looks up the names from the variable `fishion_user_vars`.
+This is a list of variable names.
+Each session can define values for those variables by providing the value in another variable, named just
+like the target variable, suffixed with the session name.
+
+.. note::
+
+    The variables set in this manner are all universal variables. The values
+    may be set to variables with universal or global scopes, but
+    the variables themselves will be univercal variables after session activation.
+
+
+For example:
+
+.. code-block:: fish
+
+   ~> set -U fishion_user_vars myvar othervar
+   # now fishion will try to find values for "myvar" and "othervar" for each session
+   ~> set -U myvar_work 'work work'  # the value for myvar in work session
+   ~> set -U myvar_contrib 'contrib contrib'  # the value of myvar in contrib session
+   ~> set -g myvar_default ''  # the value of myvar in default session
+
+   # now switching sessions updates the values of those variables
+   ~> fishion work
+   ~> echo $myvar
+   work work
+   ~> fishion
+   ~> echo $myvar
+
+   ~> # printed empty value
 
 License
 -------
