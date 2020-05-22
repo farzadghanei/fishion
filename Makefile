@@ -45,12 +45,12 @@ FISHION_DEST_PATH := $(FISH_DEST_FUNCTIONS_DIR)/fishion.fish
 
 
 install:
-	test -e $(FISH_DEST_FUNCTIONS_DIR); or $(MKDIR_PARENTS) $(FISH_DEST_FUNCTIONS_DIR)
-	$(INSTALL_DATA) fishion.fish $(FISHION_DEST_PATH)
+	test -e $(FISH_DEST_FUNCTIONS_DIR); or sudo $(MKDIR_PARENTS) $(FISH_DEST_FUNCTIONS_DIR)
+	sudo $(INSTALL_DATA) fishion.fish $(FISHION_DEST_PATH)
 
 
 uninstall:
-	test -e $(FISHION_DEST_PATH); and rm $(FISHION_DEST_PATH); or true
+	test -e $(FISHION_DEST_PATH); and sudo rm $(FISHION_DEST_PATH); or true
 
 
 # standard targets helpful for packaging
