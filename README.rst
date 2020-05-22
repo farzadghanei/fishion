@@ -17,13 +17,36 @@ Usage
     ~> ...
     ~> fishion  # switch to default session
     ~> ...
-    ~> fishion  -h
+    ~> fishion -h
 
 
 Installation
 ============
 
 `fishion` is a fish function, so installation means to add it to fish function library.
+
+
+Installation using make
+-----------------------
+
+The project Makefile provides targets to help install/uninstall fishion. By default fishion
+will be installed to a system shared path, but passing `mode=user` causes the target
+to work with directories under user home path.
+The make targets would try to find the most suitable path to install fishion.
+
+.. code-block:: fish
+
+   # default mode is system wide, so admin privileges is required to write to those paths
+   ~> sudo make install
+   ~> sudo make uninstall
+
+   # set mode=user to work with user home subdirectories
+   ~> make install mode=user
+   ~> make uninstall mode=user
+
+
+Manual Installation
+-------------------
 
 For a single user installation, copy the `fishion.fish` to user's fish functions path (usually `~/.config/fish/functions`)
 
@@ -60,7 +83,7 @@ Session names can be any arbitrary value, but should only contain alphanumeric c
 Sessions can be customized by:
 
 #. defining initialization `functions <https://fishshell.com/docs/current/index.html#functions>`_ named after the session.
-#. listing universal variable names, and provding values for such variables per session
+#. listing universal variable names, and providing values for such variables per session
 
 
 Init Functions
@@ -95,7 +118,7 @@ like the target variable, suffixed with the session name.
 
     The variables set in this manner are all universal variables. The values
     may be set to variables with universal or global scopes, but
-    the variables themselves will be univercal variables after session activation.
+    the variables themselves will be universal variables after session activation.
 
 
 For example:
