@@ -36,9 +36,9 @@ The make targets would try to find the most suitable path to install fishion.
 
 .. code-block:: fish
 
-   # default mode is system wide, so admin privileges is required to write to those paths
-   ~> sudo make install
-   ~> sudo make uninstall
+   # default mode is system wide, admin privileges is required, targets use sudo
+   ~> make install
+   ~> make uninstall
 
    # set mode=user to work with user home subdirectories
    ~> make install mode=user
