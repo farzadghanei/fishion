@@ -17,7 +17,7 @@ Usage
     ~> ...
     ~> fishion  # switch to default session
     ~> ...
-    ~> fishion  -h
+    ~> fishion -h
 
 
 Installation
@@ -36,10 +36,11 @@ The make targets would try to find the most suitable path to install fishion.
 
 .. code-block:: fish
 
-   ~> # default mode is system wide, so admin privileges is required to write to those paths
+   # default mode is system wide, so admin privileges is required to write to those paths
    ~> sudo make install
    ~> sudo make uninstall
-   ~> # set mode=user to work with user home subdirectories
+
+   # set mode=user to work with user home subdirectories
    ~> make install mode=user
    ~> make uninstall mode=user
 
