@@ -37,9 +37,13 @@ function fish_prompt --description 'Write out the prompt'
         end
 
 
-        # default fishion prompt
-        # @TODO: read prompt units from a variable list: fishion_prompt_tokens
-        # user host cwd vcs status
+        # Default fishion prompt has multiple units. To control the prompt
+        # set the units in $fishion_prompt_units variable, in order.
+        # Any unknown value in this list is used directly, which is helpful to customize
+        # how units are separated.
+        # The prompt always has a prefix and a suffix.
+        # All units and prefix/suffix use variables for colors.
+        # Available units: user host cwd status
 
         # cache the prompt hostname
         if not set -q __fishion_prompt_hostname
@@ -72,13 +76,24 @@ function fish_prompt --description 'Write out the prompt'
         end
 
         set -q fishion_prompt_suffix; or set -l fishion_prompt_suffix "$suffix "
+        set -q fishion_prompt_units; or set -l fishion_prompt_units user @ host ' ' cwd status
 
-        # prompt units
+        # construct the prompt
         set -l __prompt_prefix (set_color $fishion_color_prefix) "$fishion_prompt_prefix"
-        set -l __prompt_user (set_color $fish_color_user) $USER $color_normal '@'  # compat with standard fish_color_user
-        set -l __prompt_host (set_color $fish_color_host) $__fishion_prompt_hostname  # compat with standard fish_color_host
-        set -l __prompt_pwd (set_color $color_cwd) (prompt_pwd)
+        set -l __prompt_user (set_color $fish_color_user) $USER # compat with standard fish_color_user
+        set -l __prompt_host (set_color $fish_color_host) $__fishion_prompt_hostname # compat with standard fish_color_host
+        set -l __prompt_cwd (set_color $color_cwd) (prompt_pwd)
         set -l __prompt_suffix (set_color $fishion_color_suffix) "$fishion_prompt_suffix"
 
-        echo -n -s $color_normal $__prompt_prefix $__prompt_user $__prompt_host $color_normal ' ' $__prompt_pwd $__prompt_status $color_normal $__prompt_suffix
+        set _l __prompt __prompt_prefix
+        for unit in $fishion_prompt_units
+            set -l unit_varname "__prompt_$unit"
+            if set -q $unit_varname
+                set --append __prompt $$unit_varname
+            else
+                set --append __prompt $color_normal $unit  # non variable units join the prompt directly
+            end
+        end
+
+        echo -n -s $color_normal $__prompt_prefix $__prompt $color_normal $__prompt_suffix $color_normal
 end
