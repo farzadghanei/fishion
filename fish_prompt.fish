@@ -27,7 +27,7 @@ function fish_prompt --description 'Write out the prompt'
             # fishion prompt specific colors
             set -qU fishion_color_prefix; or set -U fishion_color_prefix brblack
             set -qU fishion_color_suffix; or set -U fishion_color_suffix white
-            set -qU fishion_color_vcs; or set -U fishion_color_vcs -o white
+            set -qU fishion_color_vcs; or set -U fishion_color_vcs normal
             set -U __fishion_prompt_colors_initialized
         end
 
@@ -43,7 +43,7 @@ function fish_prompt --description 'Write out the prompt'
         # how units are separated.
         # The prompt always has a prefix and a suffix.
         # All units and prefix/suffix use variables for colors.
-        # Available units: user host cwd status
+        # Available units: user host cwd vcs status
 
         # cache the prompt hostname
         if not set -q __fishion_prompt_hostname
@@ -76,14 +76,15 @@ function fish_prompt --description 'Write out the prompt'
         end
 
         set -q fishion_prompt_suffix; or set -l fishion_prompt_suffix "$suffix "
-        set -q fishion_prompt_units; or set -l fishion_prompt_units user @ host ' ' cwd status
+        set -q fishion_prompt_units; or set -l fishion_prompt_units user @ host ' ' cwd vcs status
 
         # construct the prompt
-        set -l __prompt_prefix (set_color $fishion_color_prefix) "$fishion_prompt_prefix"
-        set -l __prompt_user (set_color $fish_color_user) $USER # compat with standard fish_color_user
-        set -l __prompt_host (set_color $fish_color_host) $__fishion_prompt_hostname # compat with standard fish_color_host
-        set -l __prompt_cwd (set_color $color_cwd) (prompt_pwd)
-        set -l __prompt_suffix (set_color $fishion_color_suffix) "$fishion_prompt_suffix"
+        set -l __prompt_prefix (set_color $fishion_color_prefix)$fishion_prompt_prefix
+        set -l __prompt_user (set_color $fish_color_user)$USER # compat with standard fish_color_user
+        set -l __prompt_host (set_color $fish_color_host)$__fishion_prompt_hostname # compat with standard fish_color_host
+        set -l __prompt_cwd (set_color $color_cwd)(prompt_pwd)
+        set -l __prompt_vcs (set_color $fishion_color_vcs)(__fish_git_prompt)
+        set -l __prompt_suffix (set_color $fishion_color_suffix)$fishion_prompt_suffix
 
         set _l __prompt __prompt_prefix
         for unit in $fishion_prompt_units
