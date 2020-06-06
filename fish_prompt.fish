@@ -27,7 +27,7 @@ function fish_prompt --description 'Write out the prompt'
             set -qU fish_color_cwd; or set -U fish_color_cwd green
             # fishion prompt specific colors
             set -qU fishion_color_prefix; or set -U fishion_color_prefix brblack
-            set -qU fishion_color_suffix; or set -U fishion_color_suffix white
+            set -qU fishion_color_suffix; or set -U fishion_color_suffix brblack
             set -qU fishion_color_vcs; or set -U fishion_color_vcs normal
             set -U __fishion_prompt_colors_initialized
         end
