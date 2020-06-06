@@ -2,7 +2,7 @@
 Fishion
 *******
 
-`fishion` is a `fish shell <https://fishshell.com>`_ function to provide
+``fishion`` is a `fish shell <https://fishshell.com>`_ function to provide
 the concept of sessions. Sessions isolate command history and allow minor
 customizations. This helps to stay focused on the context of the session.
 
@@ -24,8 +24,8 @@ Prompt
 
 Fishion provides an optional configurable prompt. Depending on the installation mode, enabling
 the prompt may differ. The prompt is composed of different units (or parts), and the user
-can choose the format of the prompt by setting the `fishion_prompt_units` variable.
-Supported units are: `user`, `host`, `vcs` (currently only Git) and `status` (last command status).
+can choose the format of the prompt by setting the ``fishion_prompt_units`` variable.
+Supported units are: ``user``, ``host``, ``vcs`` (currently only Git) and ``status`` (last command status).
 
 .. code-block:: fish
 
@@ -38,11 +38,11 @@ Supported units are: `user`, `host`, `vcs` (currently only Git) and `status` (la
     farzad@farzad-thinkpad ~/p/fishion (add-prompt)[1]>
 
 All prompt units can be configured to use a different color by setting variables (
-either standard `fish_color_*` variables like `fish_color_cwd`, or fishion specific
-units like `fishion_color_vcs`).
+either standard ``fish_color_*`` variables like ``fish_color_cwd``, or fishion specific
+units like ``fishion_color_vcs``).
 
 The prompt has implicit prefix and suffix. The values (and their colors) can be set via
-variables (`fishion_prompt_prefix` and `fishion_color_prefix`)
+variables (``fishion_prompt_prefix`` and ``fishion_color_prefix``)
 
 
 Prompt variables
@@ -52,42 +52,42 @@ Here is a list of variables to customize the prompt
 
 Customizing the prompt
 
- * `fishion_prompt_prefix`: content before the first prompt unit (default is session name)
- * `fishion_prompt_suffix`: content after the last prompt unit (default is `>` for users and `#` for `root`)
- * `fishion_prompt_units`: list of units or other values to form the prompt (default is `user @ host ' ' cwd vcs status`)
+ * ``fishion_prompt_prefix``: content before the first prompt unit (default is session name)
+ * ``fishion_prompt_suffix``: content after the last prompt unit (default is ``>`` for users and ``#`` for ``root``)
+ * ``fishion_prompt_units``: list of units or other values to form the prompt (default is ``user @ host ' ' cwd vcs status``)
 
 Customizing colors (see `set_color <https://fishshell.com/docs/current/cmds/set_color.html>`_)
 
- * `fish_color_user`: set the color for userame unit (default is green)
- * `fish_color_host`: set the color for hostname unit (default is cyan)
- * `fish_color_status`: set the color for status of last commnand unit (default is red)
- * `fish_color_cwd`: set the color for current working directory unit (default is green)
- * `fishion_color_vcs`: set the color for the version control system unit (default is normal)
- * `fishion_color_prefix`: set the color for the prefix (default is brblack)
- * `fishion_color_suffix`: set the color for the prefix (default is brblack)
+ * ``fish_color_user``: set the color for userame unit (default is green)
+ * ``fish_color_host``: set the color for hostname unit (default is cyan)
+ * ``fish_color_status``: set the color for status of last commnand unit (default is red)
+ * ``fish_color_cwd``: set the color for current working directory unit (default is green)
+ * ``fishion_color_vcs``: set the color for the version control system unit (default is normal)
+ * ``fishion_color_prefix``: set the color for the prefix (default is brblack)
+ * ``fishion_color_suffix``: set the color for the prefix (default is brblack)
 
 
 Installation
 ============
 
-`fishion` and the prompt are fish functions, so installation means adding them
+``fishion`` and the prompt are fish functions, so installation means adding them
 to directories where fish could find and autoload them.
 
-For `fishion` it means one of the fish function library directories (system shared or user),
+For ``fishion`` it means one of the fish function library directories (system shared or user),
 and for the prompt it means the user's fish functions directory.
 
 
 Installation using make
 -----------------------
 
-The project's `Makefile` provides targets to help install/uninstall fishion. By default fishion
-will be installed to a system shared path, but passing `mode=user` causes the target
+The project's ``Makefile`` provides targets to help install/uninstall fishion. By default fishion
+will be installed to a system shared path, but passing ``mode=user`` causes the target
 to work with directories under user home path.
 The make targets would try to find the most suitable path to install fishion.
 
 The prompt is installed by default, but won't overwrite user's current prompt.
 Instead instructions will be printed. To skip installing/uninstall the prompt,
-pass `with-prompt=no` to the make call.
+pass ``with-prompt=no`` to the make call.
 
 .. code-block:: fish
 
@@ -107,8 +107,8 @@ pass `with-prompt=no` to the make call.
 Manual Installation
 -------------------
 
-For a single user installation, copy `fishion.fish` and/or `fish_prompt.fish`
-to user's fish functions path (usually `~/.config/fish/functions`)
+For a single user installation, copy ``fishion.fish`` and/or ``fish_prompt.fish``
+to user's fish functions path (usually ``~/.config/fish/functions``)
 
 .. code-block:: fish
 
@@ -116,10 +116,10 @@ to user's fish functions path (usually `~/.config/fish/functions`)
    # WARNING: this will overwrite existing prompt
    ~> cp -i fish_prompt.fish (realpath "$__fish_config_dir/functions/")
 
-To install for all users of the system, copy `fishion.fish` to a system shared
-path where `fish` would look for functions (maybe controlled by `$XDG_DATA_DIRS`).
+To install for all users of the system, copy ``fishion.fish`` to a system shared
+path where `fish` would look for functions (maybe controlled by ``$XDG_DATA_DIRS``).
 
-Copy `fish_prompt.fish` to where `fish_config <https://fishshell.com/docs/current/cmds/fish_config.html>`_
+Copy ``fish_prompt.fish`` to where `fish_config <https://fishshell.com/docs/current/cmds/fish_config.html>`_
 would store its sample prompts.
 
 .. code-block:: fish
@@ -156,7 +156,7 @@ Sessions can be customized by:
 Init Functions
 --------------
 
-Each init function name is prefixed with `fishion_user_init_` and ends with the session name.
+Each init function name is prefixed with ``fishion_user_init_`` and ends with the session name.
 
 
 For example:
@@ -176,7 +176,7 @@ Session Values For Universal Variables
 --------------------------------------
 
 Each session can set values for some variables, to define new variables or overwrite existing ones.
-`fishion` needs to know which variables to set, so looks up the names from the variable `fishion_user_vars`.
+``fishion`` needs to know which variables to set, so looks up the names from the variable ``fishion_user_vars``.
 This is a list of variable names.
 Each session can define values for those variables by providing the value in another variable, named just
 like the target variable, suffixed with the session name.
@@ -210,5 +210,5 @@ For example:
 License
 -------
 
-`fishion` is an open source project released under the terms of the `ISC license <https://opensource.org/licenses/ISC>`_.
+``fishion`` is an open source project released under the terms of the `ISC license <https://opensource.org/licenses/ISC>`_.
 See LICENSE file for more details.
