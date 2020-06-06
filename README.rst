@@ -52,19 +52,19 @@ Here is a list of variables to customize the prompt
 
 Customizing the prompt
 
- * ``fishion_prompt_prefix``: content before the first prompt unit (default is session name)
- * ``fishion_prompt_suffix``: content after the last prompt unit (default is ``>`` for users and ``#`` for ``root``)
- * ``fishion_prompt_units``: list of units or other values to form the prompt (default is ``user @ host ' ' cwd vcs status``)
+* ``fishion_prompt_prefix``: content before the first prompt unit (default is session name)
+* ``fishion_prompt_suffix``: content after the last prompt unit (default is ``>`` for users and ``#`` for ``root``)
+* ``fishion_prompt_units``: list of units or other values to form the prompt (default is ``user @ host ' ' cwd vcs status``)
 
 Customizing colors (see `set_color <https://fishshell.com/docs/current/cmds/set_color.html>`_)
 
- * ``fish_color_user``: set the color for userame unit (default is green)
- * ``fish_color_host``: set the color for hostname unit (default is cyan)
- * ``fish_color_status``: set the color for status of last commnand unit (default is red)
- * ``fish_color_cwd``: set the color for current working directory unit (default is green)
- * ``fishion_color_vcs``: set the color for the version control system unit (default is normal)
- * ``fishion_color_prefix``: set the color for the prefix (default is brblack)
- * ``fishion_color_suffix``: set the color for the prefix (default is brblack)
+* ``fish_color_user``: set the color for userame unit (default is green)
+* ``fish_color_host``: set the color for hostname unit (default is cyan)
+* ``fish_color_status``: set the color for status of last commnand unit (default is red)
+* ``fish_color_cwd``: set the color for current working directory unit (default is green)
+* ``fishion_color_vcs``: set the color for the version control system unit (default is normal)
+* ``fishion_color_prefix``: set the color for the prefix (default is brblack)
+* ``fishion_color_suffix``: set the color for the prefix (default is brblack)
 
 
 Installation
