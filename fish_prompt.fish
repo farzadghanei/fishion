@@ -1,4 +1,5 @@
-#!/usr/bin/env fish
+# name: fishion
+# author: Farzad Ghanei
 
 # ISC License (ISC)
 # Copyright 2020 Farzad Ghanei
