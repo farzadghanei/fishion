@@ -4,7 +4,7 @@ Fishion
 
 ``fishion`` is a `fish shell <https://fishshell.com>`_ function to provide
 the concept of sessions. Sessions isolate command history and allow minor
-customizations. This helps to stay focused on the context of the session.
+customization. This helps to stay focused on the context of the session.
 
 Usage
 =====
@@ -60,7 +60,7 @@ Customizing colors (see `set_color <https://fishshell.com/docs/current/cmds/set_
 
 * ``fish_color_user``: set the color for userame unit (default is green)
 * ``fish_color_host``: set the color for hostname unit (default is cyan)
-* ``fish_color_status``: set the color for status of last commnand unit (default is red)
+* ``fish_color_status``: set the color for status of last command unit (default is red)
 * ``fish_color_cwd``: set the color for current working directory unit (default is green)
 * ``fishion_color_vcs``: set the color for the version control system unit (default is normal)
 * ``fishion_color_prefix``: set the color for the prefix (default is brblack)
@@ -142,7 +142,7 @@ Sessions use universal variables, so activating a session affects all
 existing open shells and new ones, until the session is changed again.
 
 Using sessions not only helps to customize the shell settings/UI per context,
-but also is an easy way to do such customizations for other commands run by the
+but also is an easy way to do such customization for other commands run by the
 shell (for example via environment variables).
 
 Session names can be any arbitrary value, but should only contain alphanumeric characters.
@@ -206,6 +206,84 @@ For example:
    ~> echo $myvar
 
    ~> # printed empty value
+
+
+Example
+=======
+
+This example demonstrates how fishion and its prompt can be used to slightly customize
+a ``work`` session. The prompt style and vim settings will be different between ``work``
+and ``default`` sessions.
+Both init functions and session variables are used in conjunction for this example.
+
+To change the color and the format of the fishion prompt, session init functions
+set desired values for the related variables:
+
+
+.. code-block:: fish
+
+    # in file: ~/.config/fish/functions/fishion_user_init_default.fish
+    function fishion_user_init_default --description "init fishion default session"
+        set -U fish_color_cwd green
+        set -U fishion_prompt_units user ' ' cwd status
+    end
+
+
+.. code-block:: fish
+
+    # in file: ~/.config/fish/functions/fishion_user_init_work.fish
+    function fishion_user_init_work --description "init fishion work session"
+        set -U fish_color_cwd brblue
+        set -U fishion_prompt_units cwd vcs status
+    end
+
+
+Now the prompt for ``default`` session looks like:
+
+
+.. code-block:: fish
+
+    farzad ~/p/fishion>
+
+
+and for ``work`` session looks like:
+
+
+.. code-block:: fish
+
+    (work) ~/p/fishion (master)>
+
+
+In ``work`` session user and the space after are removed from the prompt, Git branch is printed
+after ``cwd``, and the default prefix shows the session name.
+Also the prompts use different colors for ``cwd``.
+
+To use different vimrc files for each session, we'll define a fish
+function to call vim command passing the vimrc path from the ``VIMRC``
+environment variable if exists.
+
+
+.. code-block:: fish
+
+    # file: ~/.config/fish/functions/vim.fish
+    function vim --description "run vim with proper vimrc file"
+        if set -q VIMRC; and test -e "$VIMRC"
+            command vim -u "$VIMRC" $argv
+        else
+            command vim $argv
+        end
+    end
+
+
+Then we'll set different values for this environment variable for each session,
+using the session universal variables.
+
+.. code-block:: fish
+
+    ~> set -a -U fishion_user_vars VIMRC
+    ~> set -U VIMRC_default '~/.vimrc'
+    ~> set -U VIMRC_work '~/.vimrc-work'
+
 
 License
 -------
