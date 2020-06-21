@@ -4,7 +4,7 @@ Fishion
 
 ``fishion`` is a `fish shell <https://fishshell.com>`_ function to provide
 the concept of sessions. Sessions isolate command history and allow minor
-customizations. This helps to stay focused on the context of the session.
+customization. This helps to stay focused on the context of the session.
 
 Usage
 =====
@@ -60,7 +60,7 @@ Customizing colors (see `set_color <https://fishshell.com/docs/current/cmds/set_
 
 * ``fish_color_user``: set the color for userame unit (default is green)
 * ``fish_color_host``: set the color for hostname unit (default is cyan)
-* ``fish_color_status``: set the color for status of last commnand unit (default is red)
+* ``fish_color_status``: set the color for status of last command unit (default is red)
 * ``fish_color_cwd``: set the color for current working directory unit (default is green)
 * ``fishion_color_vcs``: set the color for the version control system unit (default is normal)
 * ``fishion_color_prefix``: set the color for the prefix (default is brblack)
@@ -142,7 +142,7 @@ Sessions use universal variables, so activating a session affects all
 existing open shells and new ones, until the session is changed again.
 
 Using sessions not only helps to customize the shell settings/UI per context,
-but also is an easy way to do such customizations for other commands run by the
+but also is an easy way to do such customization for other commands run by the
 shell (for example via environment variables).
 
 Session names can be any arbitrary value, but should only contain alphanumeric characters.

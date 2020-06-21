@@ -1,0 +1,273 @@
+.\" Man page generated from reStructuredText.
+.
+.TH FISHION 1 "2020-06-21" "0.1.0" ""
+.SH NAME
+Fishion \- fishion enables fish sessions
+.
+.nr rst2man-indent-level 0
+.
+.de1 rstReportMargin
+\\$1 \\n[an-margin]
+level \\n[rst2man-indent-level]
+level margin: \\n[rst2man-indent\\n[rst2man-indent-level]]
+-
+\\n[rst2man-indent0]
+\\n[rst2man-indent1]
+\\n[rst2man-indent2]
+..
+.de1 INDENT
+.\" .rstReportMargin pre:
+. RS \\$1
+. nr rst2man-indent\\n[rst2man-indent-level] \\n[an-margin]
+. nr rst2man-indent-level +1
+.\" .rstReportMargin post:
+..
+.de UNINDENT
+. RE
+.\" indent \\n[an-margin]
+.\" old: \\n[rst2man-indent\\n[rst2man-indent-level]]
+.nr rst2man-indent-level -1
+.\" new: \\n[rst2man-indent\\n[rst2man-indent-level]]
+.in \\n[rst2man-indent\\n[rst2man-indent-level]]u
+..
+.SH SYNOPSIS
+.INDENT 0.0
+.INDENT 3.5
+fishion [session_name]
+.UNINDENT
+.UNINDENT
+.SH DESCRIPTION
+.sp
+fishion is a fish shell function to provide the concept of sessions.
+Sessions isolate command history and allow minor customization.
+This helps to stay focused on the context of the session.
+.sp
+Each session uses its own history (by setting \fBfish_history\fP),
+and can be used to customize some shell settings (prompt colors, etc.)
+Sessions use universal variables, so activating a session affects all
+existing open shells and new ones, until the session is changed again.
+Session names can be any arbitrary value, but should only contain alphanumeric characters.
+.SS Session Customization
+.sp
+Sessions can be customized by:
+.INDENT 0.0
+.IP 1. 3
+defining initialization functions named after the session.
+.IP 2. 3
+listing universal variable names, and providing values for such variables per session
+.UNINDENT
+.sp
+\fBinit functions\fP:
+Each init function name is prefixed with \fBfishion_user_init_\fP and
+ends with the session name.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+function fishion_user_init_work \-\-description "init fishion work session"
+    # command to run when work session is selected
+    # define variables, source other files, etc.
+end
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+To init the "default" session (when no session name is provided):
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+function fishion_user_init_default \-\-description "init fishion default session"
+    # command to run when default session is selected, maybe undo/reset what other sessions did?
+end
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+\fBsession universal variables\fP:
+Each session can set values for variables, to define new variables or overwrite existing ones.
+fishion needs to know which variables to set, so looks up the names from the variable
+\fBfishion_user_vars\fP\&. This is a list of variable names.
+.sp
+Each session can define values for those variables by providing the value in another variable, named just
+like the target variable, suffixed with the session name.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+~> set \-U fishion_user_vars myvar othervar
+# now fishion will try to find values for "myvar" and "othervar" for each session
+~> set \-U myvar_work \(aqwork work\(aq  # the value for myvar in work session
+~> set \-U myvar_contrib \(aqcontrib contrib\(aq  # the value of myvar in contrib session
+~> set \-g myvar_default \(aq\(aq  # the value of myvar in default session
+
+# now switching sessions updates the values of those variables
+~> fishion work
+~> echo $myvar
+work work
+~> fishion
+~> echo $myvar
+
+~> # printed empty value
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Fishion Prompt
+.sp
+Fishion provides an optional configurable prompt, composed of different units.
+The user can choose the format of the prompt by setting the \fBfishion_prompt_units\fP variable.
+.sp
+Supported units are: \fBuser\fP, \fBhost\fP, \fBvcs\fP (currently only Git) and \fBstatus\fP
+(last command status).
+The prompt has implicit prefix and suffix. The values (and their colors) can be set via
+variables (\fBfishion_prompt_prefix\fP and \fBfishion_color_prefix\fP)
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+# fishion_prompt_units is a list of units (and other values) to format the prompt
+farzad ~/p/fishion (add\-prompt)> set fishion_prompt_units user
+farzad>
+# any non\-unit value in fishion_prompt_units, is used directly by the prompt
+farzad> set fishion_prompt_units user \(aq@\(aq host \(aq \(aq cwd vcs status
+farzad@localhost ~/p/fishion (add\-prompt)> false
+farzad@localhost ~/p/fishion (add\-prompt)[1]>
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+All prompt units can be configured to use a different color by setting variables (
+either standard \fBfish_color_*\fP variables like \fBfish_color_cwd\fP, or fishion specific
+units like \fBfishion_color_vcs\fP).
+.sp
+\fBPrompt variables\fP
+.INDENT 0.0
+.IP \(bu 2
+\fBfishion_prompt_prefix\fP: content before the first prompt unit (default is session name)
+.IP \(bu 2
+\fBfishion_prompt_suffix\fP: content after the last prompt unit (default is \fB>\fP for users and \fB#\fP for \fBroot\fP)
+.IP \(bu 2
+\fBfishion_prompt_units\fP: list of units or other values to form the prompt (default is \fBuser @ host \(aq \(aq cwd vcs status\fP)
+.IP \(bu 2
+\fBfish_color_user\fP: set the color for userame unit (default is green)
+.IP \(bu 2
+\fBfish_color_host\fP: set the color for hostname unit (default is cyan)
+.IP \(bu 2
+\fBfish_color_status\fP: set the color for status of last command unit (default is red)
+.IP \(bu 2
+\fBfish_color_cwd\fP: set the color for current working directory unit (default is green)
+.IP \(bu 2
+\fBfishion_color_vcs\fP: set the color for the version control system unit (default is normal)
+.IP \(bu 2
+\fBfishion_color_prefix\fP: set the color for the prefix (default is brblack)
+.IP \(bu 2
+\fBfishion_color_suffix\fP: set the color for the prefix (default is brblack)
+.UNINDENT
+.SH EXAMPLE
+.sp
+This example demonstrates how fishion and its prompt can be used
+to slightly customize a "work" session. The prompt style and vim settings will be
+different between "work" and "default" sessions.
+Both init functions and session variables are used in conjunction for this example.
+.sp
+To change the color and the format of the fishion prompt, session init functions
+set desired values for the related variables:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+# in file: ~/.config/fish/functions/fishion_user_init_default.fish
+function fishion_user_init_default \-\-description "init fishion default session"
+    set \-U fish_color_cwd green
+    set \-U fishion_prompt_units user \(aq \(aq cwd status
+end
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+# in file: ~/.config/fish/functions/fishion_user_init_work.fish
+function fishion_user_init_work \-\-description "init fishion work session"
+    set \-U fish_color_cwd brblue
+    set \-U fishion_prompt_units cwd vcs status
+end
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Now the prompt for default session looks like:
+.INDENT 0.0
+.INDENT 3.5
+\fIfarzad ~/p/fishion>\fP
+.UNINDENT
+.UNINDENT
+.sp
+and for work session looks like:
+.INDENT 0.0
+.INDENT 3.5
+\fI(work) ~/p/fishion (master)>\fP
+.UNINDENT
+.UNINDENT
+.sp
+In work session, user and the space after are removed from the prompt, Git branch is printed
+after cwd, and the default prefix shows the session name.
+Also the prompts use different colors for \fIcwd\fP\&.
+.sp
+To use different vimrc files for each session, we\(aqll define a fish
+function to call vim command passing the vimrc path from an environment
+variable if exists.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+# file: ~/.config/fish/functions/vim.fish
+function vim \-\-description "run vim with proper vimrc file"
+    if set \-q VIMRC; and test \-e "$VIMRC"
+        command vim \-u "$VIMRC" $argv
+    else
+        command vim $argv
+    end
+end
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Then we\(aqll set different values for this environment variable for each session,
+using the session universal variables.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+~> set \-a \-U fishion_user_vars VIMRC
+~> set \-U VIMRC_default \(aq~/.vimrc\(aq
+~> set \-U VIMRC_work \(aq~/.vimrc\-work\(aq
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SH REPORTING BUGS
+.sp
+Bugs can be reported with \fI\%https://github.com/farzadghanei/fishion/issues\fP
+.SH AUTHOR
+Farzad Ghanei <farzad.ghanei@tutanota.com>
+.SH COPYRIGHT
+Copyright (c) 2020 Farzad Ghanei. fishion is an open source project released under the terms of the ISC license.
+.\" Generated by docutils manpage writer.
+.

@@ -92,6 +92,10 @@ clean:
 
 distclean: clean
 
+# required: python docutils
+docs:
+	rst2man.py --input-encoding=utf8 --output-encoding=utf8 --strict docs/man/fishion.rst docs/man/fishion.1
+
 
 .DEFAULT_GOAL := build
-.PHONY: build test clean distclean install uninstall
+.PHONY: build test clean distclean install uninstall docs
