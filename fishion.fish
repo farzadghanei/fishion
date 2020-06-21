@@ -33,7 +33,7 @@ function fishion --description "select a fish session"
         return 0
     end
     if contains -- '-v' $argv; or contains -- '--version' $argv
-        echo '0.0.1'
+        echo '0.1.0'
         return 0
     end
 
